@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesan Khusus</title>
+    <link href="" rel="stylesheet">
+    <style>
+        
+        body {
+            background-color: pink;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            font-family: 'Dancing Script', cursive;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        #name {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+        .message-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+            font-family: 'Roboto', sans-serif;
+        }
+        .message {
+            display: none;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1s ease-in-out;
+            z-index: 1;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            margin-bottom: 15px;
+            font-family: 'Dancing Script', cursive;
+            z-index: 1;
+        }
+        button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            transform: rotate(45deg);
+            animation: float 5s infinite ease-in-out;
+            z-index: 0;
+        }
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+        }
+        .heart::before {
+            top: -10px;
+            left: 0;
+        }
+        .heart::after {
+            top: 0;
+            left: -10px;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(45deg); }
+            50% { transform: translateY(-20px) rotate(45deg); }
+        }
+        .emoji {
+            position: absolute;
+            font-size: 50px;
+            animation: moveEmoji 10s infinite;
+        }
+        @keyframes moveEmoji {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(100vw); }
+            100% { transform: translateX(0); }
+        }
+        .emoji:nth-child(odd) {
+            animation-duration: 12s;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="name">haiii bocah cantik dan baik</div>
+    <div class="message-container">
+        <button onclick="showNextMessage()">klik sampe 7 kali yaaa</button>
+        <div class="message" id="messageDisplay"></div>
+    </div>
+
+    <div class="emoji" style="top: 10%; left: -50px;"></div>
+    <div class="emoji" style="top: 70%; left: -50px;"></div>
+
+    <script>
+        const messages = [
+            "kamu lagi pusing yaa",
+            "jangan lupa mam obat yaa",
+            "abis mam obat boboo",
+            "semoga cepet sembuh ya sayang",
+            "LOVEUUUUUUUU",
+            "ahahahaha"
+        ];
+        let currentMessageIndex = 0;
+
+        function showNextMessage() {
+            const messageDisplay = document.getElementById('messageDisplay');
+
+            if (currentMessageIndex < messages.length) {
+                messageDisplay.innerHTML = `<p>${messages[currentMessageIndex]}</p>`;
+                messageDisplay.style.display = "block";
+                currentMessageIndex++;
+            } else {
+                messageDisplay.innerHTML = `<p>GOOD NIGHT SAYANG</p>`;
+                currentMessageIndex = 0; // Reset to start over if needed
+            }
+        }
+
+        // Generate hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.style.top = `${Math.random() * 100}vh`;
+            heart.style.left = `${Math.random() * 100}vw`;
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        setInterval(createHeart, 200);
+        </script>
+ <script>
+    function setupMusic() {
+        const music = document.getElementById('backgroundMusic');
+        
+        const isMusicPlaying = localStorage.getItem('musicPlaying') === 'true';
+        const musicCurrentTime = localStorage.getItem('musicCurrentTime') || 0;
+
+        if (isMusicPlaying) {
+            music.currentTime = parseFloat(musicCurrentTime);
+        }
+
+        music.addEventListener('play', () => {
+            localStorage.setItem('musicPlaying', 'true');
+        });
+
+        music.addEventListener('pause', () => {
+            localStorage.setItem('musicPlaying', 'false');
+        });
+
+        setInterval(() => {
+            localStorage.setItem('musicCurrentTime', music.currentTime);
+        }, 1000);
+
+        document.addEventListener('click', function startMusic() {
+            music.play().catch(error => {
+                console.log('Autoplay prevented', error);
+            });
+            document.removeEventListener('click', startMusic);
+        });
+    }
+
+        document.addEventListener('DOMContentLoaded', setupMusic);
+</script>
+
+<audio id="backgroundMusic" loop>
+    <source src="1.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</script>
+</body>
+</html>
